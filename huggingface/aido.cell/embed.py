@@ -22,7 +22,7 @@ from aido_cell.utils import align_adata, preprocess_counts
 # CONFIGURATION - Set these variables
 # ============================================================
 MODEL_NAME = "genbio-ai/AIDO.Cell-3M"  # HuggingFace model handle
-INPUT_FILE = "temp_adata.h5ad"          # Path to input AnnData file
+INPUT_FILE = "/kaggle/input/singlecellperturbationdata/adamson/adamson/perturb_processed.h5ad"          # Path to input AnnData file
 OUTPUT_FILE = None                       # Output file (None = auto-generate from input)
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"  # Auto-detect device
 BATCH_SIZE = 32

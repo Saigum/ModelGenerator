@@ -10,6 +10,10 @@ current_dir = os.path.dirname(os.path.abspath(__file__))
 gene_list_path = os.path.join(os.path.dirname(current_dir), 'models', 'gene_lists', 'OS_scRNA_gene_index.19264.tsv')
 MODEL_GENES = pd.read_csv(gene_list_path, sep='\t')['gene_name'].to_numpy()
 
+def is_ens(gene_rep:str)->bool:
+    if gene_rep.startswith('ENSG') or gene_rep.startswith('ENSMUSG') or gene_rep.startswith('ENS'):
+        return True
+    return False
 
 def align_adata(adata: ad.AnnData) -> Tuple[ad.AnnData, np.ndarray]:
     """Aligns the input AnnData object to the AIDO.Cell gene set.
@@ -25,6 +29,15 @@ def align_adata(adata: ad.AnnData) -> Tuple[ad.AnnData, np.ndarray]:
     print('###########  Aligning data to AIDO.Cell  ###########')
     print(f'AIDO.Cell was pretrained on a fixed set of {len(MODEL_GENES)} genes.')
     print('Aligning your data to the AIDO.Cell gene set...')
+    if is_ens(adata.var.index.values[0]):
+        print("adata does have index set as ensembl_ids")
+        print("re-indexing")        
+        adata.var['gene_name'] = adata.var['gene_name'].astype(str)        
+        adata.var['ensembl_id'] = adata.var.index
+        adata.var.index = adata.var['gene_name']
+        adata.var.index.name = None         
+        adata.var_names_make_unique()
+
     missing_genes = np.setdiff1d(MODEL_GENES, adata.var.index)
     new_missing_genes = np.setdiff1d(adata.var.index, MODEL_GENES)
     print(f'{len(new_missing_genes)} in your data that cannot be used by AIDO.Cell. Removing these.')
