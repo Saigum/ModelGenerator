@@ -25,7 +25,7 @@ MODEL_NAME = "genbio-ai/AIDO.Cell-3M"  # HuggingFace model handle
 INPUT_FILE = "/kaggle/input/singlecellperturbationdata/adamson/adamson/perturb_processed.h5ad"          # Path to input AnnData file
 OUTPUT_FILE = None                       # Output file (None = auto-generate from input)
 DEVICE = "cuda" if torch.cuda.is_available() else "cpu"  # Auto-detect device
-BATCH_SIZE = 32
+BATCH_SIZE = 4
 EMBEDDING_KEY = "X_aido_cell"           # Key to store embeddings in adata.obsm
 # ============================================================
 
