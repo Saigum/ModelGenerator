@@ -57,6 +57,6 @@ def preprocess_counts(counts, device='cpu'):
     # Convert to bfloat16 if on CUDA (Flash Attention requires bf16/fp16)
     # Keep float32 for CPU compatibility
     if X.is_cuda:
-        X = X.to(torch.float16)
+        X = X.to(torch.bfloat16)
 
     return X

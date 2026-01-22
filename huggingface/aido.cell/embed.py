@@ -19,12 +19,6 @@ from aido_cell.models import CellFoundationModel, CellFoundationConfig
 from aido_cell.utils import align_adata, preprocess_counts
 import torch
 
-# This disables the specific hardware-accelerated kernels 
-# that are causing the CUTLASS error.
-torch.backends.cuda.enable_flash_sdp(False)
-torch.backends.cuda.enable_mem_efficient_sdp(False)
-torch.backends.cuda.enable_math_sdp(True)
-
 # ============================================================
 # CONFIGURATION - Set these variables
 # ============================================================
@@ -77,7 +71,7 @@ try:
 
     # Convert model to bfloat16 if using CUDA (required for Flash Attention)
     if DEVICE == "cuda":
-        model = model.to(torch.float16)
+        model = model.to(torch.bfloat16)
         print("✓ Model converted to float16 for Flash Attention")
 
     model.eval()
